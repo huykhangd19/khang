@@ -102,38 +102,22 @@ Public Class frmCapnhatsanpham
     End Sub
 
     Private Sub btnXoa_Click(sender As Object, e As EventArgs) Handles btnXoa.Click
-        Dim delquery As String = "delete from LOAISANPHAM where MASP=@MASP delete from SANPHAM where MASP=@MASP"
-        Dim delete As SqlCommand = New SqlCommand(delquery, conn)
-        Dim resulft As DialogResult = MessageBox.Show("Bạn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        conn.Open()
-        Try
-            If txtMASP.Text = "" Then
-                MessageBox.Show("Bạn cần nhập mã khách hàng", "Nhập thiếu", MessageBoxButtons.OKCancel, MessageBoxIcon.Error)
-                txtMASP.Focus()
-            Else
-                If resulft = Windows.Forms.DialogResult.Yes Then
-                    delete.Parameters.AddWithValue("@MASP", txtMASP.Text)
-                    delete.ExecuteNonQuery()
-                    conn.Close()
-                    MessageBox.Show("Xóa thành công")
-
-                    txtMASP.Text = Nothing
-                    txtTENSP.Text = Nothing
-                    txtMALOAI.Text = Nothing
-                    txtTENLOAI.Text = Nothing
-                    txtSOLUONG.Text = Nothing
-                    txtMASP.Focus()
-                End If
+        If txtMASP.Text = "" Then
+            MessageBox.Show("Nhập Mã sản phẩm cần xóa")
+        Else
+            Dim delquery As String = "delete from LOAISANPHAM where MASP=@MASP delete from SANPHAM where MASP=@MASP"
+            Dim delete As SqlCommand = New SqlCommand(delquery, conn)
+            Dim resulft As DialogResult = MessageBox.Show("Bạn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If resulft = Windows.Forms.DialogResult.Yes Then
+                conn.Open()
+                delete.Parameters.AddWithValue("@MASP", txtMASP.Text)
+                delete.ExecuteNonQuery()
+                conn.Close()
+                MessageBox.Show("Xóa thành công")
+                LoadData()     
             End If
-        Catch ex As Exception
-            MessageBox.Show("Nhập đúng mã sản phẩm cần xóa", "Lỗi", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
-        End Try
+        End If
 
-
-        db.Clear()
-        dgvSanpham.DataSource = db
-        dgvSanpham.DataSource = Nothing
-        LoadData()
     End Sub
 
     Private Sub btnThem_Click(sender As Object, e As EventArgs) Handles btnThem.Click
