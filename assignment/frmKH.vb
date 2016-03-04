@@ -39,4 +39,7 @@ Public Class frmKH
         Me.Close()
     End Sub
 
+    Private Sub frmKH_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
 End Class

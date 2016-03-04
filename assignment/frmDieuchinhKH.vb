@@ -98,38 +98,22 @@ Public Class frmDieuchinhKH
 
     
     Private Sub btnXoa_Click(sender As Object, e As EventArgs) Handles btnXoa.Click
-        Dim delquery As String = "delete from KHACHHANG where MAKH=@MAKH"
-        Dim delete As SqlCommand = New SqlCommand(delquery, conn)
-        Dim resulft As DialogResult = MessageBox.Show("Bạn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-        conn.Open()
-        Try
-            If txtMaKH.Text = "" Then
-                MessageBox.Show("Bạn cần nhập mã khách hàng", "Nhập thiếu", MessageBoxButtons.OKCancel, MessageBoxIcon.Error)
-                txtMaKH.Focus()
-            Else
-                If resulft = Windows.Forms.DialogResult.Yes Then
-                    delete.Parameters.AddWithValue("@MAKH", txtMaKH.Text)
-                    delete.ExecuteNonQuery()
-                    conn.Close()
-                    MessageBox.Show("Xóa thành công")
-
-                    txtMaKH.Text = Nothing
-                    txtTenkh.Text = Nothing
-                    txtAdd.Text = Nothing
-                    txtSDT.Text = Nothing
-                    txtEmail.Text = Nothing
-                    txtMaKH.Focus()
-                End If
+        If txtMaKH.Text = "" Then
+            MessageBox.Show("Nhập mã khách hàng cần xóa")
+        Else
+            Dim delquery As String = "delete from KHACHHANG where MAKH=@MAKH"
+            Dim delete As SqlCommand = New SqlCommand(delquery, conn)
+            Dim resulft As DialogResult = MessageBox.Show("Bạn muốn xóa không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If resulft = Windows.Forms.DialogResult.Yes Then
+                conn.Open()
+                delete.Parameters.AddWithValue("@MAKH", txtMaKH.Text)
+                delete.ExecuteNonQuery()
+                conn.Close()
+                MessageBox.Show("Xóa thành công")
+                LoadData()
             End If
-        Catch ex As Exception
-            MessageBox.Show("Nhập đúng mã khách hàng cần xóa", "Lỗi", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
-        End Try
+        End If
 
-
-        db.Clear()
-        dgvKH.DataSource = db
-        dgvKH.DataSource = Nothing
-        LoadData()
     End Sub
 
     Private Sub LoadData()
